@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Created by Jenaide Sibolie
+"""Created by Jenaide Sibolie
 """
 from typing import Tuple
 
