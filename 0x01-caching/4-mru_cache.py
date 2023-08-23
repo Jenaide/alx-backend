@@ -3,6 +3,7 @@
 Created by Jenaide Sibolie
 """
 from base_caching import BaseCaching
+from collections import OrderedDict
 
 
 class MRUCache(BaseCaching):
@@ -15,7 +16,7 @@ class MRUCache(BaseCaching):
         Initializing cache
         """
         super().__init__()
-        self.cache_data = []
+        self.cache_data = OrderedDict()
 
     def put(self, key, item):
         """
@@ -26,7 +27,7 @@ class MRUCache(BaseCaching):
         if key not in self.cache_data:
             if len(self.cache_data) + 1 > BaseCaching.MAX_ITEMS:
                 mru_keys, _ = self.cache_data.popitem(False)
-                print("DISCARD: ", mru_keys)
+                print("DISCARD:", mru_keys)
             self.cache_data[key] = item
             self.cache_data.move_to_end(key, last=False)
         else:
