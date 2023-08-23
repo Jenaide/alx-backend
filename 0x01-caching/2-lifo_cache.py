@@ -3,6 +3,7 @@
 Created by Jenaide Sibolie
 """
 from base_caching import BaseCaching
+from collections import OrderedDict
 
 
 class LIFOCache(BaseCaching):
@@ -16,7 +17,7 @@ class LIFOCache(BaseCaching):
         initializing cache
         """
         super().__init__()
-        self.cache_data = []
+        self.cache_data = OrderedDict()
 
     def put(self, key, item):
         """
@@ -28,7 +29,7 @@ class LIFOCache(BaseCaching):
         if key not in self.cache_data:
             if len(self.cache_data) + 1 > BaseCaching.MAX_ITEMS:
                 x_key, _ = self.cache_data.popitem(True)
-                print("DISCARD: ", x_key)
+                print("DISCARD:", x_key)
 
         self.cache_data[key] = item
         self.cache_data.move_to_end(key, last=True)
