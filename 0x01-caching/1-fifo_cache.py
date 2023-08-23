@@ -25,14 +25,11 @@ class FIFOCache(BaseCaching):
         """
         if key is None or item is None:
             return
-
+        self.cache_data[key] = item
         if len(self.cache_data) => BaseCaching.MAX_ITEMS:
-            disc_key = self.queue.pop(0)
-            del self.cache_data[disc_key]
+            disc_key, _ = self.cache_data.popitem(False)
             print("DISCARD:", disc_key)
 
-        self.queue.append(key)
-        self.cache_data[key] = item
 
     def get(self, key):
         """
@@ -41,4 +38,4 @@ class FIFOCache(BaseCaching):
         if key is None or key not in self.cache_data:
             return None
 
-        return self.cache_data[key]
+        return self.cache_data.get[key]
