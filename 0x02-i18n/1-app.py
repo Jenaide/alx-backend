@@ -21,7 +21,7 @@ babel = Babel(app)
 
 
 @app.route('/', strict_slashes=False)
-def index():
+def index() -> str:
     """
     route that outputs hello world
     """

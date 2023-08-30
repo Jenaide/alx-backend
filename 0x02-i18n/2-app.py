@@ -17,7 +17,7 @@ app.config.from_object(Config)
 babel = Babel(app)
 
 @babel.localeselector
-def get_locale():
+def get_locale() -> str:
     """
     a function to retrieve the locale from a web page
     """
@@ -25,7 +25,7 @@ def get_locale():
 
 
 @app.route('/', strict_slashes=False)
-def index():
+def index() -> str:
     """
     route that outputs hello world
     """
