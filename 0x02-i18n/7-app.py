@@ -5,6 +5,7 @@ Created by Jenaide Sibolie
 from flask import Flask, render_template, request, g
 from flask_babel import Babel
 from typing import Union, Dict
+import pytz
 
 
 class Config:
@@ -41,6 +42,7 @@ def before_request() -> None:
     user = fetch_user()
     g.user = user
 
+
 @babel.localeselector
 def get_locale():
     """
@@ -49,7 +51,25 @@ def get_locale():
     local = request.args.get('locale', '')
     if local in app.config['LANGUAGES']:
         return local
-    return request.accept_languages.best_match(app.config["LANGUAGES"])
+    if g.user and g.user['locale'] in app.config['LANGUAGES']:
+        return g.user['locale']
+    header = request.headers.get('locale', '')
+    if header in app.config['LANGUAGES']:
+        return header
+    return app.config['BABEL_DEFAULT_LOCALE']
+
+@babel.timezoneselector
+def fetch_timezone() -> str:
+    """
+    method that gets the timezone for a web page
+    """
+    time = request.args.get('timezone', '').strip()
+    if not time and g.user:
+        time = g.user['timezone']
+    try:
+        return pytz.timezone(time).zone
+    except pytz.exceptions.UnknownTimezoneError:
+        return app.config['BABEL_DEFAULT_TIMEZONE']
 
 
 @app.route('/', strict_slashes=False)
@@ -57,7 +77,7 @@ def index() -> str:
     """
     route that outputs hello world
     """
-    return render_template('5-index.html')
+    return render_template('7-index.html')
 
 
 if __name__ == '__main__':

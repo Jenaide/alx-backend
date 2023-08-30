@@ -41,15 +41,21 @@ def before_request() -> None:
     user = fetch_user()
     g.user = user
 
+
 @babel.localeselector
 def get_locale():
     """
     a function to retrieve the locale from a web page
     """
     local = request.args.get('locale', '')
-    if local in app.config['LANGUAGES']:
+    if local in app.config["LANGUAGES"]:
         return local
-    return request.accept_languages.best_match(app.config["LANGUAGES"])
+    if g.user and g.user['locale'] in app.config['LANGUAGES']:
+        return g.user['locale']
+    header = request.headers.get('locale', '')
+    if header in app.config['LANGUAGES']:
+        return header
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 @app.route('/', strict_slashes=False)
@@ -57,7 +63,7 @@ def index() -> str:
     """
     route that outputs hello world
     """
-    return render_template('5-index.html')
+    return render_template('6-index.html')
 
 
 if __name__ == '__main__':
