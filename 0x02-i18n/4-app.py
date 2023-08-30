@@ -14,6 +14,7 @@ class Config:
 
 app = Flask(__name__)
 app.config.from_object(Config)
+app.url_map.strict_slashes = False
 babel = Babel(app)
 
 
@@ -25,12 +26,12 @@ def get_locale() -> str:
     strings = request.query_string.decode('utf-8').split('&')
     table = dict(map(lambda x: (x if '=' in x else '{}='.format(x)).split('='), strings))
     if 'locale' in table:
-        if table['locale'] in app.config['LANGUAGES']:
+        if table['locale'] in app.config["LANGUAGES"]:
             return table['locale']
-        return request.accept_languages.best_match(app.config['LANGUAGES'])
+        return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
-@app.route('/', strict_slashes=False)
+@app.route('/')
 def index() -> str:
     """
     route that outputs hello world
