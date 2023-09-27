@@ -1,4 +1,4 @@
-#!/usr/bin/yarn dev
+#!/usr/bin/env node
 import { createQueue } from 'kue';
 
 
